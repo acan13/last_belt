@@ -62,15 +62,23 @@ module.exports = {
   },
   create: (req,res) => {
     console.log('running users create method')
-    var user = new User(req.body)
-    user.save((err) => {
+    let newUser = new User(req.body)
+    User.findOne({name:newUser.name}, (err, user) => {
       if (err) {
-        console.log('error creating user')
-        console.log(err)
+        console.log('error finding user')
         return res.json(err)
       } else {
-        console.log('created user')
-        return res.json(user)
+        if (user) {
+          session.user_id = user._id
+          return res.json(user)
+        } else {
+          newUser.save((error) => {
+            console.log('error saving new user')
+            return res.json(error)
+          })
+          session.user_id = newUser._id
+          return res.json(newUser)
+        }
       }
     })
   }

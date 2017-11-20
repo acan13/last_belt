@@ -8,11 +8,5 @@ var ListSchema = new mongoose.Schema({
   status:{type:Boolean}
 }, {timestamps:true})
 
-var UserSchema = new mongoose.Schema({
-  //schema stuff
-  name:{type:String, required:true, minlength:2},
-  lists:[ListSchema]
-}, {timestamps:true})
-
-mongoose.model("User",UserSchema)
-module.exports = mongoose.model("User")
+mongoose.model("List",ListSchema)
+module.exports = mongoose.model("List")

@@ -1,6 +1,6 @@
 path = require('path')
 var answers = require('../controllers/answers_controller.js')
-var questions = require('../controllers/questions_controller.js')
+var lists = require('../controllers/lists_controller.js')
 var users = require('../controllers/users_controller.js')
 var sessions = require('../controllers/sessions_controller.js')
 // add required models here
@@ -13,11 +13,11 @@ module.exports = (app) => {
   app.get('/answers/:answer_id',answers.show),
   app.post('/answers',answers.create),
 
-  app.get('/questions',questions.index),
-  app.get('/questions/:question_id/destroy',questions.destroy),
-  app.post('/questions/:question_id',questions.update),
-  app.get('/questions/:question_id',questions.show),
-  app.post('/questions',questions.create),
+  app.get('/lists',lists.index),
+  app.get('/lists/:list_id/destroy',lists.destroy),
+  app.post('/lists/:list_id',lists.update),
+  app.get('/lists/:list_id',lists.show),
+  app.post('/lists',lists.create),
 
   app.get('/users',users.index),
   app.get('/users/:id/destroy',users.destroy),

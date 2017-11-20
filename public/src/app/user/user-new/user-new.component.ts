@@ -18,10 +18,6 @@ export class UserNewComponent implements OnInit {
 
   ngOnInit() {
     this.user = new User()
-
-    if(this._userService.getCurrentUser){
-      this._route.navigateByUrl('/dashboard')
-    }
   }
 
   onSubmit(){

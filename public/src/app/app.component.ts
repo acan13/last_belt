@@ -9,7 +9,6 @@ import { Location } from '@angular/common'
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  title = 'app';
 
   constructor(
     private _userService: UserService,
@@ -21,14 +20,17 @@ export class AppComponent implements OnInit {
     this._userService.getCurrentUser(
       (user) => {
         if (!user){
-          // navigate to login if not logged in
-          this._route.navigateByUrl('/login')
+          console.log('app module user',user)
+          this._route.navigateByUrl('/')
           return
         }
-
-        this._location.back()
+        console.log('found a logged in user')
+        if (this._route.url == '/'){
+          console.log('url was root')
+          this._route.navigateByUrl('/dashboard')
+        }
       },
-      (error) => {}
+      (error) => {console.log(error)}
 
     )
   }

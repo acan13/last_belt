@@ -3,15 +3,14 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { UserNewComponent } from './user/user-new/user-new.component'
 import { UserComponent } from './user/user.component'
+import { DashboardComponent } from './dashboard/dashboard.component'
 
 const routes: Routes = [
   {path: '', pathMatch:'full', component:UserComponent, children: [
     { path: '', component:UserNewComponent}
   ]},
 
-  {path:'user', component: UserComponent, children:[
-    { path: 'new', component:UserNewComponent}
-  ]}
+  {path: 'dashboard', component: DashboardComponent}
 ];
 
 @NgModule({
