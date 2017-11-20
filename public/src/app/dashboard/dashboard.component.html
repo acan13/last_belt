@@ -47,11 +47,12 @@
   <div *ngIf='todo.creator === current_user.name || todo.guest === current_user.name'>
     <form>
       <input type="checkbox" name="" [checked]="todo.status ? 'checked' : ''" [disabled]='todo.creator !== current_user.name' (click)='check(todo._id)'>
+      {{ todo.creator }} |
+      {{ todo.title }} -
+      {{ todo.description }} -
+      {{ todo.createdAt | date}}
     </form>
-    {{ todo.creator }} |
-    {{ todo.title }} -
-    {{ todo.description }} -
-    {{ todo._created_at }}
+
   </div>
 </div>
 

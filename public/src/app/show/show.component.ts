@@ -19,7 +19,7 @@ export class ShowComponent implements OnInit {
   constructor(
     private _listService: ListService,
     private _route: ActivatedRoute,
-    private _redirect: Router
+    private _redirect: Router,
     private _userService: UserService
   ) { }
 
