@@ -35,7 +35,13 @@ module.exports = {
         console.log(err)
         return res.json(err)
       } else {
-        // do something with the list
+        console.log('list status before',list.status)
+        if (list.status) {
+          list.status = false
+        } else {
+          list.status = true
+        }
+        console.log('list status after',list.status)
         list.save((error) => {
           if (error) {
             console.log('error saving list')

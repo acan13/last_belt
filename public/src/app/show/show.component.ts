@@ -51,4 +51,19 @@ export class ShowComponent implements OnInit {
     )
   }
 
+  check(id){
+    this._listService.updateCheck(id,
+      (list) => {
+        console.log('list',list)
+        this._listService.getLists(
+          (lists) => {
+            this.lists = lists
+           },
+          (error) => { console.log(error)}
+        )
+      },
+      (err) => {console.log(err)}
+    )
+  }
+
 }

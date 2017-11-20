@@ -233,7 +233,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/dashboard/dashboard.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<h6>Bucket List</h6>\n<p>\n  <a [routerLink]=\"['/dashboard']\" disabled>Home</a>\n  <button (click)='logout()'>Logout</button>\n</p>\n\n<h3>Welcome, {{ current_user.name }}!</h3>\n\n\n<form #formData='ngForm' (submit)=\"onSubmit(); formData.resetForm()\">\n  <input\n    type=\"text\"\n    name=\"title\"\n    value=\"\"\n    placeholder=\"Title\"\n    required\n    minlength='5'\n    [(ngModel)]='list.title'\n    #title='ngModel'>\n  <input\n    type=\"text\"\n    name=\"description\"\n    value=\"\"\n    placeholder=\"Description\"\n    required\n    minlength='10'\n    [(ngModel)]='list.description'\n    #description='ngModel'>\n  <select\n    name=\"guest\"\n    [(ngModel)]='list.guest'\n    #guest='ngModel'>\n    <option value=\"\" disabled selected>Select a person</option>\n    <option [hidden]='guest._id === current_user._id' *ngFor='let guest of users' value=\"{{guest.name}}\">{{ guest.name }}</option>\n  </select>\n  <input type=\"submit\" name=\"\" value=\"Add to list\" [disabled]='!formData.valid'>\n</form>\n<p>\n  <small [hidden]='title.untouched || title.valid'>Title must be at least 5 characters.</small>\n</p>\n<p>\n  <small [hidden]='description.untouched || description.valid'>Description must be at least 10 characters.</small>\n</p>\n\n<h3>Before I die I want to...</h3>\n<div *ngFor='let todo of lists'>\n  <div *ngIf='todo.creator === current_user.name || todo.guest === current_user.name'>\n    box place holder\n    {{ todo.creator }} |\n    {{ todo.title }} -\n    {{ todo.description }} -\n    {{ todo._created_at }}\n  </div>\n</div>\n\n<h3>List of other users (Click to view profile):</h3>\n<p *ngFor='let user of users'>\n  <a\n    [routerLink]=\"['/user',user._id]\"\n    [hidden]='current_user._id === user._id'\n    >{{ user.name }}</a>\n</p>\n"
+module.exports = "<h6>Bucket List</h6>\n<p>\n  <a [routerLink]=\"['/dashboard']\" disabled>Home</a>\n  <button (click)='logout()'>Logout</button>\n</p>\n\n<h3>Welcome, {{ current_user.name }}!</h3>\n\n\n<form #formData='ngForm' (submit)=\"onSubmit(); formData.resetForm()\">\n  <input\n    type=\"text\"\n    name=\"title\"\n    value=\"\"\n    placeholder=\"Title\"\n    required\n    minlength='5'\n    [(ngModel)]='list.title'\n    #title='ngModel'>\n  <input\n    type=\"text\"\n    name=\"description\"\n    value=\"\"\n    placeholder=\"Description\"\n    required\n    minlength='10'\n    [(ngModel)]='list.description'\n    #description='ngModel'>\n  <select\n    name=\"guest\"\n    [(ngModel)]='list.guest'\n    #guest='ngModel'>\n    <option value=\"\" disabled selected>Select a person</option>\n    <option [hidden]='guest._id === current_user._id' *ngFor='let guest of users' value=\"{{guest.name}}\">{{ guest.name }}</option>\n  </select>\n  <input type=\"submit\" name=\"\" value=\"Add to list\" [disabled]='!formData.valid'>\n</form>\n<p>\n  <small [hidden]='title.untouched || title.valid'>Title must be at least 5 characters.</small>\n</p>\n<p>\n  <small [hidden]='description.untouched || description.valid'>Description must be at least 10 characters.</small>\n</p>\n\n<h3>Before I die I want to...</h3>\n<div *ngFor='let todo of lists'>\n  <div *ngIf='todo.creator === current_user.name || todo.guest === current_user.name'>\n    <form>\n      <input type=\"checkbox\" name=\"\" [checked]=\"todo.status ? 'checked' : ''\" [disabled]='todo.creator !== current_user.name' (click)='check(todo._id)'>\n    </form>\n    {{ todo.creator }} |\n    {{ todo.title }} -\n    {{ todo.description }} -\n    {{ todo._created_at }}\n  </div>\n</div>\n\n<h3>List of other users (Click to view profile):</h3>\n<p *ngFor='let user of users'>\n  <a\n    [routerLink]=\"['/user',user._id]\"\n    [hidden]='current_user._id === user._id'\n    >{{ user.name }}</a>\n</p>\n"
 
 /***/ }),
 
@@ -290,6 +290,15 @@ var DashboardComponent = (function () {
         var _this = this;
         this.list.creator = this.current_user.name;
         this._listService.createList(this.list, this.current_user, function (list) {
+            console.log('list', list);
+            _this._listService.getLists(function (lists) {
+                _this.lists = lists;
+            }, function (error) { console.log(error); });
+        }, function (err) { console.log(err); });
+    };
+    DashboardComponent.prototype.check = function (id) {
+        var _this = this;
+        this._listService.updateCheck(id, function (list) {
             console.log('list', list);
             _this._listService.getLists(function (lists) {
                 _this.lists = lists;
@@ -353,6 +362,18 @@ var ListService = (function () {
             errorback(err);
         });
     };
+    ListService.prototype.updateCheck = function (id, callback, errorback) {
+        var _this = this;
+        console.log('running update check');
+        this._http.post("/lists/" + id).subscribe(function (res) {
+            var list = res.json();
+            _this.list = list;
+            console.log('list:', list);
+            callback(list);
+        }, function (err) {
+            errorback(err);
+        });
+    };
     ListService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */]])
@@ -405,7 +426,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/show/show.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<h6>Bucket List</h6>\n<p>\n  <a [routerLink]=\"['/dashboard']\">Home</a>\n  <button (click)='logout()'>Logout</button>\n</p>\n\n<h1>{{ target_user.name }}'s Bucket List'</h1>\n\n<h3>Done</h3>\n<div *ngFor='let todo of lists' [hidden]='!todo.status'>\n  <p *ngIf='todo.creator === target_user.name'>\n    box place holder\n    {{ todo.creator }} |\n    {{ todo.title }} -\n    {{ todo.description }} -\n    {{ todo._created_at }}\n  </p>\n</div>\n\n\n<h3>Pending</h3>\n<div *ngFor='let todo of lists' [hidden]='todo.status'>\n  <p *ngIf='todo.creator === target_user.name'>\n    box place holder\n    {{ todo.creator }} |\n    {{ todo.title }} -\n    {{ todo.description }} -\n    {{ todo._created_at }}\n  </p>\n</div>\n"
+module.exports = "<h6>Bucket List</h6>\n<p>\n  <a [routerLink]=\"['/dashboard']\">Home</a>\n  <button (click)='logout()'>Logout</button>\n</p>\n\n<h1>{{ target_user.name }}'s Bucket List'</h1>\n\n<h3>Done</h3>\n<div *ngFor='let todo of lists' [hidden]='!todo.status'>\n  <div *ngIf='todo.creator === target_user.name'>\n    <form>\n      <input type=\"checkbox\" name=\"\" [checked]=\"todo.status ? 'checked' : ''\" [disabled]='todo.creator !== current_user.name'\n      (click)='check(todo._id)'>\n    </form>\n    {{ todo.creator }} |\n    {{ todo.title }} -\n    {{ todo.description }} -\n    {{ todo._created_at }}\n  </div>\n</div>\n\n\n<h3>Pending</h3>\n<div *ngFor='let todo of lists' [hidden]='todo.status'>\n  <div *ngIf='todo.creator === target_user.name'>\n    <form>\n      <input type=\"checkbox\" name=\"\" [checked]=\"todo.status ? 'checked' : ''\" [disabled]='todo.creator !== current_user.name'\n      (click)='check(todo._id)'>\n    </form>\n    {{ todo.creator }} |\n    {{ todo.title }} -\n    {{ todo.description }} -\n    {{ todo._created_at }}\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -461,6 +482,15 @@ var ShowComponent = (function () {
     ShowComponent.prototype.logout = function () {
         var _this = this;
         this._userService.logout(function () { _this._redirect.navigateByUrl('/'); }, function () { });
+    };
+    ShowComponent.prototype.check = function (id) {
+        var _this = this;
+        this._listService.updateCheck(id, function (list) {
+            console.log('list', list);
+            _this._listService.getLists(function (lists) {
+                _this.lists = lists;
+            }, function (error) { console.log(error); });
+        }, function (err) { console.log(err); });
     };
     ShowComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({

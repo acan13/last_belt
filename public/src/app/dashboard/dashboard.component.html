@@ -45,7 +45,9 @@
 <h3>Before I die I want to...</h3>
 <div *ngFor='let todo of lists'>
   <div *ngIf='todo.creator === current_user.name || todo.guest === current_user.name'>
-    box place holder
+    <form>
+      <input type="checkbox" name="" [checked]="todo.status ? 'checked' : ''" [disabled]='todo.creator !== current_user.name' (click)='check(todo._id)'>
+    </form>
     {{ todo.creator }} |
     {{ todo.title }} -
     {{ todo.description }} -

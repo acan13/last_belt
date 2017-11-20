@@ -34,4 +34,19 @@ export class ListService {
       }
     )
   }
+
+  updateCheck(id, callback, errorback){
+    console.log('running update check')
+    this._http.post(`/lists/${id}`).subscribe(
+      (res) => {
+        const list = res.json()
+        this.list = list
+        console.log('list:',list)
+        callback(list)
+      },
+      (err) => {
+        errorback(err)
+      }
+    )
+  }
 }

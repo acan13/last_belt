@@ -8,23 +8,29 @@
 
 <h3>Done</h3>
 <div *ngFor='let todo of lists' [hidden]='!todo.status'>
-  <p *ngIf='todo.creator === target_user.name'>
-    box place holder
+  <div *ngIf='todo.creator === target_user.name'>
+    <form>
+      <input type="checkbox" name="" [checked]="todo.status ? 'checked' : ''" [disabled]='todo.creator !== current_user.name'
+      (click)='check(todo._id)'>
+    </form>
     {{ todo.creator }} |
     {{ todo.title }} -
     {{ todo.description }} -
     {{ todo._created_at }}
-  </p>
+  </div>
 </div>
 
 
 <h3>Pending</h3>
 <div *ngFor='let todo of lists' [hidden]='todo.status'>
-  <p *ngIf='todo.creator === target_user.name'>
-    box place holder
+  <div *ngIf='todo.creator === target_user.name'>
+    <form>
+      <input type="checkbox" name="" [checked]="todo.status ? 'checked' : ''" [disabled]='todo.creator !== current_user.name'
+      (click)='check(todo._id)'>
+    </form>
     {{ todo.creator }} |
     {{ todo.title }} -
     {{ todo.description }} -
     {{ todo._created_at }}
-  </p>
+  </div>
 </div>
