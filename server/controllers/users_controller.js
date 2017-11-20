@@ -74,7 +74,7 @@ module.exports = {
         } else {
           newUser.save((error) => {
             console.log('error saving new user')
-            return res.json(error)
+            console.log(error)
           })
           session.user_id = newUser._id
           return res.json(newUser)

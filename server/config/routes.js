@@ -17,7 +17,7 @@ module.exports = (app) => {
   app.get('/lists/:list_id/destroy',lists.destroy),
   app.post('/lists/:list_id',lists.update),
   app.get('/lists/:list_id',lists.show),
-  app.post('/lists',lists.create),
+  app.post('/users/:id/lists',lists.create),
 
   app.get('/users',users.index),
   app.get('/users/:id/destroy',users.destroy),

@@ -4,7 +4,9 @@ import { User } from './user'
 
 @Injectable()
 export class UserService {
-  current_user = null
+  current_user = User
+  users = []
+  target_user = User
 
   constructor(
     private _http: Http
@@ -46,6 +48,36 @@ export class UserService {
       (res) => {
         this.current_user = null
         callback(res.json())
+      },
+      (err) => {
+        errorback(err)
+      }
+    )
+  }
+
+  getUsers(callback, errorback){
+    console.log('running get users')
+    this._http.get('/users').subscribe(
+      (res) => {
+        const users = res.json()
+        console.log('users',users)
+        this.users = users
+        callback(users)
+      },
+      (err) => {
+        errorback(err)
+      }
+    )
+  }
+
+  getUser(id, callback, errorback){
+    console.log('running get user')
+    this._http.get(`/users/${id}`).subscribe(
+      (res) => {
+        const target_user = res.json()
+        console.log('target user',target_user)
+        this.target_user = target_user
+        callback(target_user)
       },
       (err) => {
         errorback(err)

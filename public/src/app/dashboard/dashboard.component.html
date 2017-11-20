@@ -1,3 +1,62 @@
+<h6>Bucket List</h6>
 <p>
-  dashboard works!
+  <a [routerLink]="['/dashboard']" disabled>Home</a>
+  <button (click)='logout()'>Logout</button>
+</p>
+
+<h3>Welcome, {{ current_user.name }}!</h3>
+
+
+<form #formData='ngForm' (submit)="onSubmit(); formData.resetForm()">
+  <input
+    type="text"
+    name="title"
+    value=""
+    placeholder="Title"
+    required
+    minlength='5'
+    [(ngModel)]='list.title'
+    #title='ngModel'>
+  <input
+    type="text"
+    name="description"
+    value=""
+    placeholder="Description"
+    required
+    minlength='10'
+    [(ngModel)]='list.description'
+    #description='ngModel'>
+  <select
+    name="guest"
+    [(ngModel)]='list.guest'
+    #guest='ngModel'>
+    <option value="" disabled selected>Select a person</option>
+    <option [hidden]='guest._id === current_user._id' *ngFor='let guest of users' value="{{guest.name}}">{{ guest.name }}</option>
+  </select>
+  <input type="submit" name="" value="Add to list" [disabled]='!formData.valid'>
+</form>
+<p>
+  <small [hidden]='title.untouched || title.valid'>Title must be at least 5 characters.</small>
+</p>
+<p>
+  <small [hidden]='description.untouched || description.valid'>Description must be at least 10 characters.</small>
+</p>
+
+<h3>Before I die I want to...</h3>
+<div *ngFor='let todo of lists'>
+  <div *ngIf='todo.creator === current_user.name || todo.guest === current_user.name'>
+    box place holder
+    {{ todo.creator }} |
+    {{ todo.title }} -
+    {{ todo.description }} -
+    {{ todo._created_at }}
+  </div>
+</div>
+
+<h3>List of other users (Click to view profile):</h3>
+<p *ngFor='let user of users'>
+  <a
+    [routerLink]="['/user',user._id]"
+    [hidden]='current_user._id === user._id'
+    >{{ user.name }}</a>
 </p>

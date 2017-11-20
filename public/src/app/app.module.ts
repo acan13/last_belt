@@ -9,7 +9,9 @@ import { AppComponent } from './app.component';
 import { UserNewComponent } from './user/user-new/user-new.component';
 import { UserComponent } from './user/user.component';
 import { UserService } from './user/user.service';
-import { DashboardComponent } from './dashboard/dashboard.component'
+import { ListService } from './list.service'
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { ShowComponent } from './show/show.component'
 
 
 @NgModule({
@@ -17,7 +19,8 @@ import { DashboardComponent } from './dashboard/dashboard.component'
     AppComponent,
     UserNewComponent,
     UserComponent,
-    DashboardComponent
+    DashboardComponent,
+    ShowComponent
   ],
   imports: [
     BrowserModule,
@@ -25,7 +28,7 @@ import { DashboardComponent } from './dashboard/dashboard.component'
     FormsModule,
     HttpModule
   ],
-  providers: [UserService],
+  providers: [UserService, ListService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

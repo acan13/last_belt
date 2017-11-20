@@ -5,7 +5,8 @@ var ListSchema = new mongoose.Schema({
   title:{type:String, required:true, minlength:5},
   description:{type:String, required:true, minlength:10},
   creator:{type:String, required:true},
-  status:{type:Boolean}
+  guest:{type:String},
+  status:{type:Boolean, default:false}
 }, {timestamps:true})
 
 mongoose.model("List",ListSchema)

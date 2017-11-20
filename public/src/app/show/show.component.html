@@ -1,0 +1,30 @@
+<h6>Bucket List</h6>
+<p>
+  <a [routerLink]="['/dashboard']">Home</a>
+  <button (click)='logout()'>Logout</button>
+</p>
+
+<h1>{{ target_user.name }}'s Bucket List'</h1>
+
+<h3>Done</h3>
+<div *ngFor='let todo of lists' [hidden]='!todo.status'>
+  <p *ngIf='todo.creator === target_user.name'>
+    box place holder
+    {{ todo.creator }} |
+    {{ todo.title }} -
+    {{ todo.description }} -
+    {{ todo._created_at }}
+  </p>
+</div>
+
+
+<h3>Pending</h3>
+<div *ngFor='let todo of lists' [hidden]='todo.status'>
+  <p *ngIf='todo.creator === target_user.name'>
+    box place holder
+    {{ todo.creator }} |
+    {{ todo.title }} -
+    {{ todo.description }} -
+    {{ todo._created_at }}
+  </p>
+</div>
