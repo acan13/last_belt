@@ -1,0 +1,15 @@
+<form #formData='ngForm' (submit)='onSubmit(); formData.resetForm()'>
+  <p>
+    <label for="name">Name: </label>
+    <input
+      type="text"
+      name="name"
+      value=""
+      required
+      minlength="2"
+      [(ngModel)]="user.name"
+      #name="ngModel">
+    <input [disabled]='!formData.valid' type="submit" name="" value="Login">
+  </p>
+  <p><small [hidden]='formData.untouched || name.valid'>Name must have at least 2 characters.</small></p>
+</form>
